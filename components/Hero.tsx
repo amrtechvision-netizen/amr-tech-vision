@@ -70,7 +70,7 @@ export default function Hero() {
   transition={{ duration: 1 }}
 >
   <Image
-    src="/images/logo.jpeg"
+    src="/images/logo2.jpeg"
     alt="AMR TECH VISION"
     width={450}
     height={450}
