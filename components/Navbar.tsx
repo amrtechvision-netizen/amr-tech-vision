@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,7 +67,7 @@ useEffect(() => {
 
           <a
   href="tel:+919052620763"
-  className="bg-cyan-500 text-center py-3 rounded-lg font-semibold hover:bg-cyan-600 transition"
+  className="bg-cyan-500 px-5 py-2 rounded-lg font-semibold hover:bg-cyan-600 transition"
 >
   📞 Call Now
 </a>

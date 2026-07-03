@@ -55,16 +55,16 @@ export default function Services() {
           {services.map((service, index) => (
             <motion.div
   key={index}
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  viewport={{ once: true }}
+  transition={{
+    delay: index * 0.15,
+    duration: 0.5,
+  }}
   whileHover={{
     scale: 1.05,
     y: -10,
-  }}
-  whileTap={{
-    scale: 0.98,
-  }}
-  transition={{
-    duration: 0.3,
-    ease: "easeInOut",
   }}
   className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
 >

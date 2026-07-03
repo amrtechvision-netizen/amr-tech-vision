@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import Image from "next/image";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
@@ -15,7 +17,11 @@ const images = [
 
 export default function Gallery() {
   return (
-    <section
+    <motion.section
+initial={{opacity:0,y:60}}
+whileInView={{opacity:1,y:0}}
+viewport={{once:true}}
+transition={{duration:.7}}
   id="gallery"
   className="py-14 md:py-20 bg-slate-950"
 >
@@ -58,6 +64,6 @@ export default function Gallery() {
 </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

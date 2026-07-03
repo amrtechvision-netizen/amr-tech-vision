@@ -32,7 +32,11 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section
+    <motion.section
+  initial={{ opacity:0,y:60 }}
+  whileInView={{ opacity:1,y:0 }}
+  viewport={{ once:true }}
+  transition={{ duration:.7 }}
       id="projects"
       className="bg-slate-950 text-white py-14 md:py-20 px-4 sm:px-6 lg:px-8"
     >
@@ -50,18 +54,18 @@ export default function Projects() {
           {projects.map((project, index) => (
             <motion.div
   key={index}
-  whileHover={{
-    scale: 1.03,
-    y: -8,
-  }}
-  whileTap={{
-    scale: 0.98,
-  }}
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  viewport={{ once: true }}
   transition={{
-    duration: 0.3,
-    ease: "easeInOut",
+    delay: index * 0.15,
+    duration: 0.5,
   }}
-  className="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 shadow-lg hover:border-cyan-400 hover:shadow-cyan-500/30 transition-all duration-300"
+  whileHover={{
+    scale: 1.05,
+    y: -10,
+  }}
+  className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
 >
               <Image
                 src={project.image}
@@ -85,6 +89,6 @@ export default function Projects() {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

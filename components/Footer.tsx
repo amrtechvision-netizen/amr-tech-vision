@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-12 md:py-16">

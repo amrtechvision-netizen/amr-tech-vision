@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import { useRef } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -29,7 +31,11 @@ export default function Contact() {
   };
 
   return (
-    <section
+    <motion.section
+initial={{opacity:0,y:60}}
+whileInView={{opacity:1,y:0}}
+viewport={{once:true}}
+transition={{duration:.7}}
       id="contact"
       className="bg-slate-900 text-white py-20 px-6"
     >
@@ -145,6 +151,6 @@ export default function Contact() {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

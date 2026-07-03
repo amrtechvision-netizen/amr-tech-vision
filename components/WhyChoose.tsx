@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 const features = [
   {
     title: "Certified Engineers",
@@ -27,7 +30,11 @@ const features = [
 
 export default function WhyChoose() {
   return (
-    <section className="bg-white py-14 md:py-20">
+    <motion.section
+initial={{opacity:0,y:60}}
+whileInView={{opacity:1,y:0}}
+viewport={{once:true}}
+transition={{duration:.7}} className="bg-white py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-slate-900">
@@ -40,9 +47,20 @@ export default function WhyChoose() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mt-10">
           {features.map((item, index) => (
-            <div
+            <motion.div
   key={index}
-  className="bg-white border border-gray-200 rounded-xl p-5 md:p-8 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  viewport={{ once: true }}
+  transition={{
+    delay: index * 0.15,
+    duration: 0.5,
+  }}
+  whileHover={{
+    scale: 1.05,
+    y: -10,
+  }}
+  className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
 >
               <h3 className="text-base md:text-2xl font-bold text-cyan-500 flex items-center gap-2">
   <span className="text-2xl">✅</span>
@@ -52,11 +70,11 @@ export default function WhyChoose() {
               <p className="mt-3 text-gray-600 text-xs md:text-base leading-6">
                 {item.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }
