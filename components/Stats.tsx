@@ -19,18 +19,21 @@ const stats = [
 
 export default function Stats() {
   return (
-    <section className="bg-cyan-500 text-white py-16">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="bg-cyan-500 text-white py-12 md:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
 
           {stats.map((item, index) => (
-            <div key={index}>
-              <h2 className="text-5xl font-bold">
+            <div
+  key={index}
+  className="bg-cyan-600/20 rounded-xl py-5 px-3 hover:bg-cyan-600/30 transition"
+>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">
                 {item.number}
               </h2>
 
-              <p className="mt-3 text-lg">
+              <p className="mt-2 text-sm sm:text-base md:text-lg font-medium">
                 {item.title}
               </p>
             </div>

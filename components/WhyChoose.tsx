@@ -27,28 +27,29 @@ const features = [
 
 export default function WhyChoose() {
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="bg-white py-14 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <h2 className="text-4xl font-bold text-center">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-slate-900">
           Why Choose AMR TECH VISION
         </h2>
 
-        <p className="text-center text-gray-500 mt-3">
+        <p className="text-center text-gray-500 text-sm sm:text-base mt-3">
           Your trusted partner for complete ELV & Security Solutions
         </p>
 
-        <div className="grid md:grid-cols-3 gap-8 mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-10">
           {features.map((item, index) => (
             <div
-              key={index}
-              className="border rounded-xl p-8 shadow hover:shadow-xl transition"
-            >
-              <h3 className="text-2xl font-bold text-cyan-500">
-                ✓ {item.title}
-              </h3>
+  key={index}
+  className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+>
+              <h3 className="text-xl sm:text-2xl font-bold text-cyan-500 flex items-center gap-2">
+  <span className="text-2xl">✅</span>
+  {item.title}
+</h3>
 
-              <p className="mt-4 text-gray-600">
+              <p className="mt-3 text-gray-600 text-sm sm:text-base leading-6">
                 {item.desc}
               </p>
             </div>
