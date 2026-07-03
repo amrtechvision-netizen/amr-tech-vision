@@ -27,11 +27,11 @@ export default function Testimonials() {
   What our clients say about our ELV & Security services
 </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mt-10">
           {testimonials.map((item, index) => (
             <div
   key={index}
-  className="bg-slate-900 p-6 sm:p-8 rounded-xl border border-slate-700 shadow-lg hover:border-cyan-400 hover:shadow-cyan-500/30 hover:-translate-y-2 transition-all duration-300"
+  className="bg-slate-900 p-4 md:p-8 rounded-xl border border-slate-700 shadow-lg hover:border-cyan-400 hover:shadow-cyan-500/30 hover:-translate-y-2 transition-all duration-300"
 >
   <div className="text-4xl text-cyan-400 mb-3">
   ❝
@@ -39,7 +39,7 @@ export default function Testimonials() {
               <p className="text-yellow-400 text-xl">
   ⭐⭐⭐⭐⭐
 </p>
-              <p className="mt-4 text-gray-300 text-sm sm:text-base leading-7 italic">
+              <p className="mt-4 text-gray-300 text-xs md:text-base leading-7 italic">
   "{item.review}"
 </p>
               <h3 className="mt-6 text-lg font-bold text-cyan-400">

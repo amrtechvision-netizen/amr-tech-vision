@@ -43,7 +43,7 @@ export default function Contact() {
           Get in touch with AMR TECH VISION
         </p>
 
-        <div className="grid md:grid-cols-2 gap-10 mt-12">
+        <div className="grid grid-cols-2 gap-10 mt-12">
 
           {/* Contact Details */}
           <div className="bg-slate-800 p-8 rounded-xl">

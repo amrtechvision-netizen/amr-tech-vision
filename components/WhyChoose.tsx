@@ -38,18 +38,18 @@ export default function WhyChoose() {
           Your trusted partner for complete ELV & Security Solutions
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mt-10">
           {features.map((item, index) => (
             <div
   key={index}
-  className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+  className="bg-white border border-gray-200 rounded-xl p-5 md:p-8 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
 >
-              <h3 className="text-xl sm:text-2xl font-bold text-cyan-500 flex items-center gap-2">
+              <h3 className="text-base md:text-2xl font-bold text-cyan-500 flex items-center gap-2">
   <span className="text-2xl">✅</span>
   {item.title}
 </h3>
 
-              <p className="mt-3 text-gray-600 text-sm sm:text-base leading-6">
+              <p className="mt-3 text-gray-600 text-xs md:text-base leading-6">
                 {item.desc}
               </p>
             </div>

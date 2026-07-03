@@ -50,7 +50,7 @@ export default function Services() {
           Complete ELV & Security Solutions
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
 
           {services.map((service, index) => (
             <motion.div
@@ -66,17 +66,17 @@ export default function Services() {
     duration: 0.3,
     ease: "easeInOut",
   }}
-  className="bg-slate-900 rounded-xl p-6 sm:p-8 border border-slate-700 hover:border-cyan-400 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300"
+  className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
 >
-  <div className="text-4xl sm:text-5xl">
+  <div className="text-3xl md:text-5xl">
     {service.icon}
   </div>
 
-  <h3 className="text-xl sm:text-2xl font-bold mt-4 text-cyan-400">
+  <h3 className="text-base md:text-2xl font-bold">
     {service.title}
   </h3>
 
-  <p className="text-gray-400 mt-3 text-sm sm:text-base leading-6 sm:leading-7">
+  <p className="text-xs md:text-base">
     {service.desc}
   </p>
 </motion.div>

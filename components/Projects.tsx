@@ -46,7 +46,7 @@ export default function Projects() {
           Our Recent ELV & Security Installations
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {projects.map((project, index) => (
             <motion.div
   key={index}
@@ -68,11 +68,11 @@ export default function Projects() {
                 alt={project.title}
                 width={600}
                 height={400}
-                className="w-full h-52 sm:h-56 md:h-64 object-cover hover:scale-105 transition-transform duration-500"
+                className="w-full h-32 md:h-64 object-cover"
               />
 
               <div className="p-5 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-semibold text-cyan-400">
+                <h3 className="text-xs md:text-base md:text-xl sm:text-xl font-semibold text-cyan-400">
                   {project.title}
                 </h3>
 
