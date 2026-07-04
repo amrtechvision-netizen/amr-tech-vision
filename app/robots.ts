@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
     },
 
-    sitemap: "https://www.amrtechvision.com/sitemap.xml",
+    sitemap: "https://amr-tech-vision.vercel.app/sitemap.xml",
   };
 }
