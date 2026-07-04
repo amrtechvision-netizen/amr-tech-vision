@@ -1,46 +1,68 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null);
+  const [loading, setLoading] = useState(false);
 
-  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!form.current) return;
 
-    emailjs
-      .sendForm(
+    setLoading(true);
+
+    const formData = new FormData(form.current);
+
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const phone = formData.get("phone");
+    const message = formData.get("message");
+
+    try {
+      // Save message to Firestore
+      await addDoc(collection(db, "messages"), {
+        name,
+        email,
+        phone,
+        message,
+        createdAt: new Date(),
+      });
+
+      // Send email using EmailJS
+      await emailjs.sendForm(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
         form.current,
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      )
-      .then(() => {
-        alert("Message sent successfully!");
-        form.current?.reset();
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Failed to send message.");
-      });
+      );
+
+      alert("Message sent successfully!");
+
+      form.current.reset();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send message.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <motion.section
-initial={{opacity:0,y:60}}
-whileInView={{opacity:1,y:0}}
-viewport={{once:true}}
-transition={{duration:.7}}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
       id="contact"
       className="bg-slate-900 text-white py-20 px-6"
     >
       <div className="max-w-7xl mx-auto">
-
         <h2 className="text-4xl font-bold text-center text-cyan-400">
           Contact Us
         </h2>
@@ -50,10 +72,8 @@ transition={{duration:.7}}
         </p>
 
         <div className="grid md:grid-cols-2 gap-10 mt-12">
-
           {/* Contact Details */}
           <div className="bg-slate-800 p-8 rounded-xl">
-
             <h3 className="text-2xl font-bold mb-6">
               Contact Information
             </h3>
@@ -66,23 +86,15 @@ transition={{duration:.7}}
               Mumbai - 400017
             </p>
 
-            <p className="mb-4">
-              📞 +91 9052620763
-            </p>
+            <p className="mb-4">📞 +91 9052620763</p>
 
-            <p className="mb-4">
-              📧 amrtechvision@gmail.com
-            </p>
+            <p className="mb-4">📧 amrtechvision@gmail.com</p>
 
-            <p>
-              🕒 Mon - Sat : 9:00 AM - 7:00 PM
-            </p>
-
+            <p>🕒 Mon - Sat : 9:00 AM - 7:00 PM</p>
           </div>
 
           {/* Contact Form */}
           <div className="bg-slate-800 p-8 rounded-xl">
-
             <h3 className="text-2xl font-bold mb-6">
               Send Inquiry
             </h3>
@@ -92,7 +104,6 @@ transition={{duration:.7}}
               onSubmit={sendEmail}
               className="space-y-4"
             >
-
               <input
                 type="text"
                 name="name"
@@ -127,15 +138,13 @@ transition={{duration:.7}}
 
               <button
                 type="submit"
-                className="bg-cyan-500 hover:bg-cyan-600 px-8 py-3 rounded-lg font-bold"
+                disabled={loading}
+                className="w-full bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-500 px-8 py-3 rounded-lg font-bold transition"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
-
             </form>
-
           </div>
-
         </div>
 
         {/* Google Map */}
@@ -149,7 +158,6 @@ transition={{duration:.7}}
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-
       </div>
     </motion.section>
   );

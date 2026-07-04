@@ -2,35 +2,35 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-const projects = [
-  {
-    title: "CCTV Installation",
-    image: "/images/projects/cctv.png",
-  },
-  {
-    title: "Fire Alarm System",
-    image: "/images/projects/fire-alarm.png",
-  },
-  {
-    title: "Access Control",
-    image: "/images/projects/access-control.png",
-  },
-  {
-    title: "Networking",
-    image: "/images/projects/networking.png",
-  },
-  {
-    title: "Building Management System",
-    image: "/images/projects/bms.png",
-  },
-  {
-    title: "PA System",
-    image: "/images/projects/pa-system.png",
-  },
-];
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+}
 
 export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+
+useEffect(() => {
+  const unsubscribe = onSnapshot(
+    collection(db, "projects"),
+    (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Project, "id">),
+      }));
+
+      setProjects(data);
+    }
+  );
+
+  return () => unsubscribe();
+}, []);
   return (
     <motion.section
   initial={{ opacity:0,y:60 }}
@@ -67,13 +67,19 @@ export default function Projects() {
   }}
   className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
 >
-              <Image
-                src={project.image}
-                alt={project.title}
-                width={600}
-                height={400}
-                className="w-full h-32 md:h-64 object-cover"
-              />
+              {project.image ? (
+  <Image
+    src={project.image}
+    alt={project.title}
+    width={600}
+    height={400}
+    className="w-full h-32 md:h-64 object-cover rounded-lg"
+  />
+) : (
+  <div className="w-full h-32 md:h-64 bg-slate-800 rounded-lg flex items-center justify-center text-gray-400">
+    No Image
+  </div>
+)}
 
               <div className="p-5 sm:p-6">
                 <h3 className="text-xs md:text-base md:text-xl sm:text-xl font-semibold text-cyan-400">
@@ -81,8 +87,8 @@ export default function Projects() {
                 </h3>
 
                 <p className="text-gray-400 mt-2 text-sm sm:text-base leading-6">
-                  Professional installation completed by AMR TECH VISION.
-                </p>
+  {project.description}
+</p>
               </div>
             </motion.div>
           ))}

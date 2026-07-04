@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import {
   collection,
-  getDocs,
   deleteDoc,
   doc,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -22,50 +22,51 @@ export default function ProjectsList() {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
-  const loadProjects = async () => {
-    try {
-      const snapshot = await getDocs(collection(db, "projects"));
-
-      const data = snapshot.docs.map((item) => ({
-        id: item.id,
-        ...(item.data() as Omit<Project, "id">),
-      }));
-
-      setProjects(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    loadProjects();
+    const unsubscribe = onSnapshot(
+      collection(db, "projects"),
+      (snapshot) => {
+        const data = snapshot.docs.map((item) => ({
+          id: item.id,
+          ...(item.data() as Omit<Project, "id">),
+        }));
+
+        setProjects(data);
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
   const deleteProject = async (id: string) => {
-    const confirmDelete = confirm("Delete this project?");
+    if (!confirm("Delete this project?")) return;
 
-    if (!confirmDelete) return;
-
-    await deleteDoc(doc(db, "projects", id));
-
-    loadProjects();
+    try {
+      await deleteDoc(doc(db, "projects", id));
+    } catch (error) {
+      console.error(error);
+      alert("Delete failed");
+    }
   };
 
   const updateProject = async () => {
     if (!editingId) return;
 
-    await updateDoc(doc(db, "projects", editingId), {
-      title: newTitle,
-      description: newDescription,
-    });
+    try {
+      await updateDoc(doc(db, "projects", editingId), {
+        title: newTitle,
+        description: newDescription,
+      });
 
-    alert("Project Updated Successfully!");
+      alert("Project Updated Successfully!");
 
-    setEditingId("");
-    setNewTitle("");
-    setNewDescription("");
-
-    loadProjects();
+      setEditingId("");
+      setNewTitle("");
+      setNewDescription("");
+    } catch (error) {
+      console.error(error);
+      alert("Update failed");
+    }
   };
 
   return (
@@ -76,24 +77,17 @@ export default function ProjectsList() {
       </h2>
 
       {projects.length === 0 ? (
-
         <p className="text-gray-400">
           No projects available.
         </p>
-
       ) : (
-
         <div className="space-y-5">
-
           {projects.map((project) => (
-
             <div
               key={project.id}
               className="bg-slate-800 rounded-xl p-5 flex flex-col md:flex-row md:justify-between md:items-center gap-5"
             >
-
               <div>
-
                 <h3 className="text-xl font-bold text-white">
                   {project.title}
                 </h3>
@@ -101,11 +95,9 @@ export default function ProjectsList() {
                 <p className="text-gray-400 mt-2">
                   {project.description}
                 </p>
-
               </div>
 
               <div className="flex gap-3">
-
                 <button
                   onClick={() => {
                     setEditingId(project.id);
@@ -123,19 +115,13 @@ export default function ProjectsList() {
                 >
                   Delete
                 </button>
-
               </div>
-
             </div>
-
           ))}
-
         </div>
-
       )}
 
       {editingId && (
-
         <div className="mt-10 bg-slate-800 rounded-xl p-6 border border-slate-700">
 
           <h3 className="text-2xl font-bold text-cyan-400 mb-5">
@@ -159,7 +145,6 @@ export default function ProjectsList() {
           />
 
           <div className="flex gap-3">
-
             <button
               onClick={updateProject}
               className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold"
@@ -177,11 +162,9 @@ export default function ProjectsList() {
             >
               Cancel
             </button>
-
           </div>
 
         </div>
-
       )}
 
     </div>
