@@ -6,34 +6,52 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 
 import { useEffect, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
+
 import { db } from "@/lib/firebase";
 
 interface GalleryImage {
   id: string;
+  title: string;
+  category: string;
   image: string;
 }
 
 export default function Gallery() {
+  const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<GalleryImage[]>([]);
 
   useEffect(() => {
-  const unsubscribe = onSnapshot(
-    collection(db, "projects"),
-    (snapshot) => {
-      const data = snapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          image: doc.data().image || "",
-        }))
-        .filter((item) => item.image !== "");
+    const q = query(
+      collection(db, "gallery"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<GalleryImage, "id">),
+      }));
 
       setImages(data);
-    }
-  );
+setLoading(false);
+    });
 
-  return () => unsubscribe();
-}, []);
+    return () => unsubscribe();
+  }, []);
+  if (loading) {
+  return (
+    <section className="bg-slate-950 py-20 text-center text-white">
+      Loading Gallery...
+    </section>
+  );
+}
 
   return (
     <motion.section
@@ -55,37 +73,62 @@ export default function Gallery() {
         </p>
 
         <PhotoProvider>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-10">
 
-            {images.length === 0 ? (
-              <p className="col-span-full text-center text-gray-400">
-                No images uploaded yet.
-              </p>
-            ) : (
-              images.map((img) => (
-                <PhotoView key={img.id} src={img.image}>
-                  <div className="overflow-hidden rounded-xl cursor-pointer border border-slate-700 hover:border-cyan-400 shadow-lg hover:shadow-cyan-500/30 transition-all duration-300">
+          {images.length === 0 ? (
+
+            <div className="text-center text-gray-400 mt-12">
+              No Gallery Images Found
+            </div>
+
+          ) : (
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mt-10">
+
+              {images.map((img) => (
+
+                <PhotoView
+                  key={img.id}
+                  src={img.image}
+                >
+                  <div className="relative overflow-hidden rounded-xl border border-slate-700 hover:border-cyan-400 cursor-pointer group">
+
                     <Image
-                      src={img.image}
-                      alt="Project"
-                      width={500}
-                      height={350}
-                      className="w-full h-48 md:h-64 object-cover hover:scale-110 transition duration-500"
-                    />
-                  </div>
-                </PhotoView>
-              ))
-            )}
+  src={img.image}
+  alt={img.title}
+  width={600}
+  height={450}
+  unoptimized
+  className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
+/>
 
-          </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-3 opacity-0 group-hover:opacity-100 transition">
+
+  <h3 className="text-white font-semibold">
+    {img.title}
+  </h3>
+
+  <p className="text-gray-300 text-sm">
+    {img.category}
+  </p>
+
+</div>
+</div>
+                </PhotoView>
+
+              ))}
+
+            </div>
+
+          )}
+
         </PhotoProvider>
 
         <div className="text-center mt-12">
           <a
             href="#contact"
-            className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-8 py-3 rounded-lg transition"
+            className="inline-block bg-cyan-500 hover:bg-cyan-600 px-8 py-3 rounded-lg font-semibold"
           >
-            Request a Free Site Survey
+            Request Free Site Survey
           </a>
         </div>
 

@@ -1,40 +1,63 @@
 "use client";
 
 import { motion } from "framer-motion";
-const services = [
-  {
-    title: "CCTV Surveillance",
-    desc: "HD/IP Camera Installation & Monitoring",
-    icon: "📹",
-  },
-  {
-    title: "Fire Alarm System",
-    desc: "Addressable & Conventional Fire Alarm",
-    icon: "🔥",
-  },
-  {
-    title: "Access Control",
-    desc: "Biometric, Face Recognition & RFID",
-    icon: "🔐",
-  },
-  {
-    title: "Networking",
-    desc: "LAN, WiFi & Structured Cabling",
-    icon: "🌐",
-  },
-  {
-    title: "PA System",
-    desc: "Public Address & Voice Evacuation",
-    icon: "🎤",
-  },
-  {
-    title: "Building Management",
-    desc: "Complete BMS & ELV Integration",
-    icon: "🏢",
-  },
-];
+import { useEffect, useState } from "react";
+
+import {
+  collection,
+  onSnapshot,
+} from "firebase/firestore";
+
+import { db } from "@/lib/firebase";
+const getServiceEmoji = (title: string) => {
+  const text = title.toLowerCase();
+
+  if (text.includes("cctv")) return "📹";
+  if (text.includes("fire")) return "🔥";
+  if (text.includes("access")) return "🔐";
+  if (text.includes("network")) return "🌐";
+  if (text.includes("wifi")) return "📶";
+  if (text.includes("lan")) return "🌐";
+  if (text.includes("pa")) return "🎤";
+  if (text.includes("public address")) return "🎤";
+  if (text.includes("building")) return "🏢";
+  if (text.includes("bms")) return "🏢";
+  if (text.includes("intercom")) return "☎️";
+  if (text.includes("video door")) return "🚪";
+  if (text.includes("attendance")) return "🕒";
+  if (text.includes("biometric")) return "👆";
+  if (text.includes("electric")) return "⚡";
+  if (text.includes("solar")) return "☀️";
+  if (text.includes("security")) return "🛡️";
+
+  return "🛠️";
+};
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+}
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "services"),
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Service, "id">),
+        }));
+
+        setServices(data);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <section
       id="services"
@@ -50,39 +73,54 @@ export default function Services() {
           Complete ELV & Security Solutions
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+        {services.length === 0 ? (
 
-          {services.map((service, index) => (
-            <motion.div
-  key={index}
-  initial={{ opacity: 0, scale: 0.9 }}
-  whileInView={{ opacity: 1, scale: 1 }}
-  viewport={{ once: true }}
-  transition={{
-    delay: index * 0.15,
-    duration: 0.5,
-  }}
-  whileHover={{
-    scale: 1.05,
-    y: -10,
-  }}
-  className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
->
-  <div className="text-3xl md:text-5xl">
-    {service.icon}
-  </div>
+          <div className="text-center py-20 text-gray-400">
+            No Services Available
+          </div>
 
-  <h3 className="text-base md:text-2xl font-bold">
-    {service.title}
-  </h3>
+        ) : (
 
-  <p className="text-xs md:text-base">
-    {service.desc}
-  </p>
-</motion.div>
-          ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
 
-        </div>
+            {services.map((service, index) => (
+
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: index * 0.15,
+                  duration: 0.5,
+                }}
+                whileHover={{
+                  scale: 1.05,
+                  y: -10,
+                }}
+                className="bg-slate-900 rounded-xl p-4 md:p-8 border border-slate-700 hover:border-cyan-400 transition-all duration-300"
+              >
+
+                <div className="text-3xl md:text-5xl">
+                  {getServiceEmoji(service.title)}
+                </div>
+
+                <h3 className="text-base md:text-2xl font-bold mt-4">
+                  {service.title}
+                </h3>
+
+                <p className="text-xs md:text-base mt-2 text-gray-300">
+                  {service.description}
+                </p>
+
+              </motion.div>
+
+            ))}
+
+          </div>
+
+        )}
+
       </div>
     </section>
   );

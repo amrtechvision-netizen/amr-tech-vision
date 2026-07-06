@@ -1,106 +1,62 @@
-"use client";
+import DashboardStats from "@/components/admin/DashboardStats";
+import QuickActions from "@/components/admin/QuickActions";
+import RecentProjects from "@/components/admin/RecentProjects";
+import RecentMessages from "@/components/admin/RecentMessages";
 
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+export default function DashboardPage() {
+  return (
+    <div className="space-y-8">
 
-import ProtectedRoute from "@/components/admin/ProtectedRoute";
-import AddProject from "@/components/admin/AddProject";
-import ProjectsList from "@/components/admin/ProjectsList";
-import MessagesList from "@/components/admin/MessagesList";
+      <DashboardStats />
 
-export default function Dashboard() {
-  const router = useRouter();
+      <QuickActions />
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      alert("Logged Out Successfully");
-      router.replace("/admin/login");
-    } catch (error) {
-      console.error(error);
-      alert("Logout Failed");
-    }
-  };
+      <RecentProjects />
+      
+      <RecentMessages />
+
+    </div>
+  );
 
   return (
-    <ProtectedRoute>
+    <div className="space-y-8">
 
-      <div className="min-h-screen bg-slate-950 text-white">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-4xl font-bold text-cyan-400">
+          Dashboard
+        </h1>
 
-        {/* Header */}
-
-        <div className="bg-slate-900 border-b border-slate-700 px-6 md:px-8 py-5 flex items-center justify-between">
-
-          <h1 className="text-2xl md:text-3xl font-bold text-cyan-400">
-            Admin Dashboard
-          </h1>
-
-          <button
-            onClick={logout}
-            className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg transition"
-          >
-            Logout
-          </button>
-
-        </div>
-
-        {/* Dashboard Cards */}
-
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-cyan-400 transition">
-            <h2 className="text-2xl font-bold text-cyan-400">
-              Projects
-            </h2>
-
-            <p className="mt-3 text-gray-400">
-              Add, Edit & Delete Projects
-            </p>
-          </div>
-
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-cyan-400 transition">
-            <h2 className="text-2xl font-bold text-cyan-400">
-              Gallery
-            </h2>
-
-            <p className="mt-3 text-gray-400">
-              Cloudinary Image Upload
-            </p>
-          </div>
-
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 hover:border-cyan-400 transition">
-            <h2 className="text-2xl font-bold text-cyan-400">
-              Messages
-            </h2>
-
-            <p className="mt-3 text-gray-400">
-              View Contact Form Messages
-            </p>
-          </div>
-
-        </div>
-
-        {/* Add Project */}
-
-        <div className="max-w-7xl mx-auto px-6 pb-8">
-          <AddProject />
-        </div>
-
-        {/* Projects */}
-
-        <div className="max-w-7xl mx-auto px-6 pb-8">
-          <ProjectsList />
-        </div>
-
-        {/* Messages */}
-
-        <div className="max-w-7xl mx-auto px-6 pb-10">
-          <MessagesList />
-        </div>
-
+        <p className="text-gray-400 mt-2">
+          Welcome to AMR TECH VISION Admin Panel
+        </p>
       </div>
 
-    </ProtectedRoute>
+      {/* Statistics Cards */}
+      <DashboardStats />
+
+      {/* Recent Activity (Future) */}
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-6">
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">
+          Recent Activity
+        </h2>
+
+        <p className="text-gray-400">
+          Recent projects, gallery uploads, and messages will appear here.
+        </p>
+      </div>
+
+      {/* Quick Management (Future) */}
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-6">
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">
+          Quick Management
+        </h2>
+
+        <p className="text-gray-400">
+          Quick action buttons will be added here in the next phase.
+        </p>
+      </div>
+
+    </div>
   );
 }

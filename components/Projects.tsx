@@ -14,6 +14,7 @@ interface Project {
 }
 
 export default function Projects() {
+  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
 
 useEffect(() => {
@@ -26,11 +27,20 @@ useEffect(() => {
       }));
 
       setProjects(data);
+setLoading(false);
     }
   );
 
   return () => unsubscribe();
+  
 }, []);
+if (loading) {
+  return (
+    <section className="bg-slate-950 text-white py-20 text-center">
+      Loading Projects...
+    </section>
+  );
+}
   return (
     <motion.section
   initial={{ opacity:0,y:60 }}
@@ -50,10 +60,15 @@ useEffect(() => {
           Our Recent ELV & Security Installations
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+        {projects.length === 0 ? (
+  <div className="text-center py-20 text-gray-400">
+    No Projects Available
+  </div>
+) : (
+<div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {projects.map((project, index) => (
             <motion.div
-  key={index}
+  key={project.id}
   initial={{ opacity: 0, scale: 0.9 }}
   whileInView={{ opacity: 1, scale: 1 }}
   viewport={{ once: true }}
@@ -69,12 +84,13 @@ useEffect(() => {
 >
               {project.image ? (
   <Image
-    src={project.image}
-    alt={project.title}
-    width={600}
-    height={400}
-    className="w-full h-32 md:h-64 object-cover rounded-lg"
-  />
+  src={project.image}
+  alt={project.title}
+  width={600}
+  height={400}
+  unoptimized
+  className="w-full h-32 md:h-64 object-cover rounded-lg"
+/>
 ) : (
   <div className="w-full h-32 md:h-64 bg-slate-800 rounded-lg flex items-center justify-center text-gray-400">
     No Image
@@ -93,6 +109,7 @@ useEffect(() => {
             </motion.div>
           ))}
         </div>
+      )}
 
       </div>
     </motion.section>

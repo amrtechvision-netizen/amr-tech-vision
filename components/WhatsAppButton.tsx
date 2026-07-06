@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function WhatsAppButton() {
   return (
@@ -8,9 +9,9 @@ export default function WhatsAppButton() {
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ delay: 1, duration: 0.5 }}
-      className="fixed bottom-24 md:bottom-6 right-5 z-50"
+      className="fixed bottom-24 md:bottom-6 right-5 z-50 flex flex-col items-end"
     >
-      {/* Help Bubble */}
+      {/* Need Help Bubble */}
       <motion.div
         animate={{ y: [0, -5, 0] }}
         transition={{
@@ -24,18 +25,14 @@ export default function WhatsAppButton() {
 
       {/* WhatsApp Button */}
       <motion.a
-        whileHover={{
-          scale: 1.1,
-        }}
-        whileTap={{
-          scale: 0.95,
-        }}
-        href="https://wa.me/919052620763"
+        href="https://wa.me/919052620765"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-16 h-16 rounded-full bg-green-500 shadow-xl"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 shadow-2xl flex items-center justify-center transition-all duration-300"
       >
-        <span className="text-white text-3xl">💬</span>
+        <FaWhatsapp size={30} className="text-white" />
       </motion.a>
     </motion.div>
   );

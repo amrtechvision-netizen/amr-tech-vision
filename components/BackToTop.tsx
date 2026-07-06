@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-
 import { useEffect, useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
 
@@ -18,14 +17,43 @@ export default function BackToTop() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   if (!show) return null;
 
   return (
-    <button
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-44 right-6 bg-cyan-500 hover:bg-cyan-600 text-white p-3 rounded-full shadow-lg z-50"
+    <motion.button
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={scrollToTop}
+      className="
+        fixed
+        right-5
+        bottom-32
+        md:bottom-38
+        z-50
+        w-12
+        h-12
+        rounded-full
+        bg-cyan-500
+        hover:bg-cyan-600
+        text-white
+        shadow-xl
+        flex
+        items-center
+        justify-center
+        transition-all
+        duration-300
+        hover:scale-110
+      "
     >
-      <FaArrowUp />
-    </button>
+      <FaArrowUp size={18} />
+    </motion.button>
   );
 }

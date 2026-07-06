@@ -35,6 +35,7 @@ export default function AddProject() {
     );
 
     const result = await res.json();
+    console.log(result);
 
     setImage(result.secure_url);
     setLoading(false);

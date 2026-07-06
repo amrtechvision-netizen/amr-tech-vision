@@ -4,6 +4,8 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -16,15 +18,40 @@ export default function AdminLogin() {
     try {
       setLoading(true);
 
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const credential = await signInWithEmailAndPassword(
+  auth,
+  email,
+  password
+);
 
-      alert("Login Successful");
+const uid = credential.user.uid;
 
-      router.push("/admin/dashboard");
+const adminDoc = await getDoc(
+  doc(db, "adminUsers", uid)
+);
+
+if (!adminDoc.exists()) {
+  await auth.signOut();
+
+  alert("You are not an authorized admin.");
+
+  return;
+}
+
+const admin = adminDoc.data();
+
+if (admin.status !== "active") {
+  await auth.signOut();
+
+  alert("Your account has been disabled.");
+
+  return;
+}
+
+alert(`Welcome ${admin.name}`);
+
+router.replace("/admin/dashboard");
+
 
     } catch (err: any) {
       alert(err.message);
